@@ -12,17 +12,19 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
     displayProducts();
-    itemQuery();
+
 });
 
-function displayProducts (){
-    connection.query("SELECT * FROM products"),
-        function(err,res) {
-            if(err) throw err;
-            console.log(res)
-        } 
-};
- 
+function displayProducts(){
+	console.log("Updating...");
+	var query = connection.query("SELECT * FROM products",
+		function(err, res){
+			if(err) throw err;
+            console.log(res);
+            itemQuery();
+		}
+	)};
+
 function itemQuery() {
     inquirer.prompt([
         {
@@ -38,7 +40,7 @@ function itemQuery() {
     ]).then(function (inquirerResponse) {
         var item = inquirerResponse.item_id;
         var amount = inquirerResponse.amount;
-        console.log(item,amount)
+        console.log(item, amount)
     })
 
 }
