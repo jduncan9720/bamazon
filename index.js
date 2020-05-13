@@ -1,6 +1,8 @@
+//Installed npm packages
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 
+//connect to mysql database
 var connection = mysql.createConnection({
     host: "localhost",
     port: 8889,
@@ -14,7 +16,7 @@ connection.connect(function (err) {
     displayProducts();
 
 });
-
+//function to display products in "products" database table
 function displayProducts() {
     console.log("Updating...");
     connection.query("SELECT * FROM products",
@@ -31,11 +33,29 @@ function displayProducts() {
     )
 };
 
+//Function to ask if the customer would like to shop again. 
+function restartQuery() {
+    inquirer.prompt([
+        {
+            type: "list",
+            message: "Would you like to order again?",
+            choices: ["YES", "NO"],
+            name: "choice"
+        },
+    ]).then(function (inquirerResponse) {
+        if (inquirerResponse.choice == "YES") {
+            displayProducts();
+        } else {
+            console.log("Thanks for shopping with us!");
+        }
+    });
+}
+//Function to show and run the store.
 function itemQuery() {
     inquirer.prompt([
         {
             type: "input",
-            message: "What is the item",
+            message: "What item would you like to buy?",
             name: "item_id"
         },
         {
@@ -64,18 +84,18 @@ function itemQuery() {
                         ],
                         function (err, res) {
                             if (err) throw err;
-                            console.log("Order total cost: $" + response[0].price * amount)
+                            console.log("Order total cost: $" + response[0].price * amount);
                         }
                     );
+                    setTimeout(restartQuery, 1000);
                 } else {
-                    console.log("We're sorry that item is currently out of stock!")
-                    
+                    console.log("We're sorry that item is currently out of stock!");
+                    setTimeout(restartQuery, 1000);
                 }
             }
         );
 
     })
 }
-
 
 
