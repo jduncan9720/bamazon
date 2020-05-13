@@ -47,19 +47,35 @@ function itemQuery() {
         var item = inquirerResponse.item_id;
         var amount = inquirerResponse.amount;
         var dbItem = connection.query("SELECT * FROM products WHERE item_id = ?",
-            [item], 
-            function(err, response){
+            [item],
+            function (err, response) {
                 // console.log(response)
                 if (err) throw err;
-                if(amount <= response[0].stock_quantity){ 
-                    console.log("Great we'll send it.")
+                if (amount <= response[0].stock_quantity) {
+                    var query = connection.query(
+                        "UPDATE products SET ? WHERE ?",
+                        [
+                            {
+                                stock_quantity: (response[0].stock_quantity - amount)
+                            },
+                            {
+                                item_id: item
+                            }
+                        ],
+                        function (err, res) {
+                            if (err) throw err;
+                            console.log("Order total cost: $" + response[0].price * amount)
+                        }
+                    );
                 } else {
-                    console.log("Out of Stock!")
+                    console.log("We're sorry that item is currently out of stock!")
+                    
                 }
             }
         );
-    
-})}
-        
+
+    })
+}
+
 
 
