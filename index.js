@@ -15,15 +15,21 @@ connection.connect(function (err) {
 
 });
 
-function displayProducts(){
-	console.log("Updating...");
-	var query = connection.query("SELECT * FROM products",
-		function(err, res){
-			if(err) throw err;
-            console.log(res);
+function displayProducts() {
+    console.log("Updating...");
+    connection.query("SELECT * FROM products",
+        function (err, rows) {
+            if (err) throw err;
+            console.log("GREAT STUFF FOR SALE!!")
+            console.log("--------------------------")
+            for (var i = 0; i < rows.length; i++) {
+                console.log(rows[i].item_id, rows[i].product_name, rows[i].price);
+            };
+            console.log("--------------------------")
             itemQuery();
-		}
-	)};
+        }
+    )
+};
 
 function itemQuery() {
     inquirer.prompt([
@@ -40,7 +46,20 @@ function itemQuery() {
     ]).then(function (inquirerResponse) {
         var item = inquirerResponse.item_id;
         var amount = inquirerResponse.amount;
-        console.log(item, amount)
-    })
+        var dbItem = connection.query("SELECT * FROM products WHERE item_id = ?",
+            [item], 
+            function(err, response){
+                // console.log(response)
+                if (err) throw err;
+                if(amount <= response[0].stock_quantity){ 
+                    console.log("Great we'll send it.")
+                } else {
+                    console.log("Out of Stock!")
+                }
+            }
+        );
+    
+})}
+        
 
-}
+
