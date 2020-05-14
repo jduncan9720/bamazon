@@ -69,7 +69,7 @@ function itemQuery() {
         var dbItem = connection.query("SELECT * FROM products WHERE item_id = ?",
             [item],
             function (err, response) {
-                // console.log(response)
+                //console.log(response)
                 if (err) throw err;
                 if (amount <= response[0].stock_quantity) {
                     var query = connection.query(
