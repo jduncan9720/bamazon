@@ -8,13 +8,14 @@ This is an amazon like storefront created using node, mysql and inquirer.
 The first part allows the user to:
 View the items for sale, 
 Request an item, 
-Request a certain quantity to buy See the total cost of the sale. 
+Request a certain quantity to buy, 
+See the total cost of the sale. 
 
 The second part is an application that allows the manager the ability to:
 View Products for Sale, 
 View Low Inventory, 
 Add to Inventory, 
-Add New Products
+Add New Products.
 
 ## How to use:
 This project runs in the terminal through node so the below videos will demonstrate the app. 
